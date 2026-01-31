@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import {
   Calendar,
   ChevronRight,
+  Eye,
   FileText,
   Folder,
   FolderOpen,
@@ -644,9 +645,9 @@ export default function OrganizationFilesSection({
               </div>
             )}
 
-            <div className="hidden md:grid grid-cols-[minmax(220px,1.4fr)_minmax(140px,1fr)_minmax(90px,0.6fr)_minmax(140px,0.8fr)_auto] gap-3 border-b border-zinc-200 pb-2 text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:border-zinc-800 dark:text-zinc-400">
+            <div className="hidden md:grid grid-cols-[minmax(220px,1.4fr)_minmax(140px,1fr)_minmax(90px,0.6fr)_minmax(140px,0.8fr)_auto] gap-3 px-4 border-b border-zinc-200 pb-2 text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:border-zinc-800 dark:text-zinc-400">
               <span>Name</span>
-              <span>Location</span>
+              <span>Size</span>
               <span>Type</span>
               <span>Created</span>
               <span className="text-right">Actions</span>
@@ -659,7 +660,7 @@ export default function OrganizationFilesSection({
                 return (
                   <div
                     key={folder.id}
-                    className="grid grid-cols-1 gap-2 rounded-lg border border-zinc-200 bg-white px-4 py-3 shadow-sm transition hover:border-zinc-300 dark:border-zinc-800 dark:bg-zinc-900/60 md:grid-cols-[minmax(220px,1.4fr)_minmax(140px,1fr)_minmax(90px,0.6fr)_minmax(140px,0.8fr)_auto] md:items-center"
+                    className="grid grid-cols-1 gap-2 md:gap-3 rounded-lg border border-zinc-200 bg-white px-4 py-3 shadow-sm transition hover:border-zinc-300 dark:border-zinc-800 dark:bg-zinc-900/60 md:grid-cols-[minmax(220px,1.4fr)_minmax(140px,1fr)_minmax(90px,0.6fr)_minmax(140px,0.8fr)_auto] md:items-center"
                   >
                     <div className="flex items-center gap-3">
                       <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-100 dark:bg-amber-900/30">
@@ -678,11 +679,8 @@ export default function OrganizationFilesSection({
                         </div>
                       </div>
                     </div>
-                    <div
-                      className="truncate text-xs font-mono text-zinc-500 dark:text-zinc-400"
-                      title={location}
-                    >
-                      {location}
+                    <div className="truncate text-xs font-mono text-zinc-500 dark:text-zinc-400">
+                      {formatBytes(folder.total_size_bytes ?? 0)}
                     </div>
                     <div className="text-xs text-zinc-600 dark:text-zinc-400">
                       Folder
@@ -697,10 +695,10 @@ export default function OrganizationFilesSection({
                       <button
                         type="button"
                         onClick={() => setSelectedFolderId(folder.id)}
-                        className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium text-indigo-600 hover:bg-indigo-50 dark:text-indigo-300 dark:hover:bg-indigo-900/30"
+                        className="rounded-lg p-2 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 dark:text-zinc-500 dark:hover:bg-zinc-800 dark:hover:text-zinc-300"
+                        title="Open Folder"
                       >
-                        Open
-                        <ChevronRight className="h-3.5 w-3.5" />
+                        <Eye className="h-4 w-4" />
                       </button>
                       <EditFolderModal folder={folder} iconOnly />
                       <DeleteFolderButton folderId={folder.id} iconOnly />
@@ -716,7 +714,7 @@ export default function OrganizationFilesSection({
                 return (
                   <div
                     key={doc.id}
-                    className="grid grid-cols-1 gap-2 rounded-lg border border-zinc-200 bg-white px-4 py-3 shadow-sm transition hover:border-zinc-300 dark:border-zinc-800 dark:bg-zinc-900/60 md:grid-cols-[minmax(220px,1.4fr)_minmax(140px,1fr)_minmax(90px,0.6fr)_minmax(140px,0.8fr)_auto] md:items-center"
+                    className="grid grid-cols-1 gap-2 md:gap-3 rounded-lg border border-zinc-200 bg-white px-4 py-3 shadow-sm transition hover:border-zinc-300 dark:border-zinc-800 dark:bg-zinc-900/60 md:grid-cols-[minmax(220px,1.4fr)_minmax(140px,1fr)_minmax(90px,0.6fr)_minmax(140px,0.8fr)_auto] md:items-center"
                   >
                     <div className="flex items-center gap-3">
                       <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-100 dark:bg-blue-900/30">
@@ -728,11 +726,8 @@ export default function OrganizationFilesSection({
                         </div>
                       </div>
                     </div>
-                    <div
-                      className="truncate text-xs font-mono text-zinc-500 dark:text-zinc-400"
-                      title={location}
-                    >
-                      {location}
+                    <div className="truncate text-xs font-mono text-zinc-500 dark:text-zinc-400">
+                      {formatBytes(doc.size_bytes)}
                     </div>
                     <div className="text-xs text-zinc-600 dark:text-zinc-400">
                       {documentTypeLabel(doc)}
