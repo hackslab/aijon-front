@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import Link from "next/link";
+import { Eye } from "lucide-react";
 import { AiModel, Application, Organization } from "@/lib/types";
 import CreateApplicationModal from "@/components/CreateApplicationModal";
 import EditApplicationModal from "@/components/EditApplicationModal";
@@ -176,19 +177,22 @@ export default async function ApplicationsPage({
                     </td>
                     <td className="px-6 py-4">{app.temperature}</td>
                     <td className="px-6 py-4 text-right">
-                      <div className="inline-flex items-center gap-3">
+                      <div className="inline-flex items-center gap-2">
                         <Link
                           href={`/admin/applications/${app.id}`}
-                          className="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300"
+                          className="rounded-lg p-2 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 dark:text-zinc-500 dark:hover:bg-zinc-800 dark:hover:text-zinc-300"
+                          title="View application"
+                          aria-label="View application"
                         >
-                          View
+                          <Eye className="h-4 w-4" />
                         </Link>
                         <EditApplicationModal
                           application={app}
                           organizations={organizations}
                           aiModels={aiModels}
+                          iconOnly
                         />
-                        <DeleteApplicationButton applicationId={app.id} />
+                        <DeleteApplicationButton applicationId={app.id} iconOnly />
                       </div>
                     </td>
                   </tr>

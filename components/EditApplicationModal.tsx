@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { Pencil } from "lucide-react";
 import { updateApplication } from "@/lib/actions";
 import {
   AiModel,
@@ -14,12 +15,14 @@ interface EditApplicationModalProps {
   application: Application;
   organizations: Organization[];
   aiModels?: AiModel[];
+  iconOnly?: boolean;
 }
 
 export default function EditApplicationModal({
   application,
   organizations,
   aiModels = [],
+  iconOnly = false,
 }: EditApplicationModalProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [error, setError] = useState("");
@@ -67,6 +70,18 @@ export default function EditApplicationModal({
   }
 
   if (!isOpen) {
+    if (iconOnly) {
+      return (
+        <button
+          onClick={() => setIsOpen(true)}
+          className="rounded-lg p-2 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 dark:text-zinc-500 dark:hover:bg-zinc-800 dark:hover:text-zinc-300"
+          title="Edit application"
+          aria-label="Edit application"
+        >
+          <Pencil className="h-4 w-4" />
+        </button>
+      );
+    }
     return (
       <button
         onClick={() => setIsOpen(true)}
@@ -79,12 +94,22 @@ export default function EditApplicationModal({
 
   return (
     <>
-      <button
-        className="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300 opacity-0 pointer-events-none"
-        aria-hidden="true"
-      >
-        Edit
-      </button>
+      {iconOnly ? (
+        <button
+          className="rounded-lg p-2 text-zinc-400 opacity-0 pointer-events-none"
+          aria-hidden="true"
+          tabIndex={-1}
+        >
+          <Pencil className="h-4 w-4" />
+        </button>
+      ) : (
+        <button
+          className="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300 opacity-0 pointer-events-none"
+          aria-hidden="true"
+        >
+          Edit
+        </button>
+      )}
 
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm animate-in fade-in duration-200">
         <div className="w-full max-w-lg overflow-hidden rounded-2xl bg-white p-6 shadow-xl dark:bg-zinc-900 ring-1 ring-zinc-200 dark:ring-zinc-800 animate-in zoom-in-95 duration-200">

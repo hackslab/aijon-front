@@ -224,9 +224,10 @@ export default function OrganizationApplicationsSection({
                     <td className="px-6 py-4 text-right">
                       <Link
                         href={`/admin/organizations/${organizationId}/applications/${application.id}`}
-                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 text-white text-sm font-medium shadow-md shadow-indigo-500/25"
+                        className="inline-flex items-center justify-center rounded-lg p-2 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 dark:text-zinc-500 dark:hover:bg-zinc-800 dark:hover:text-zinc-300"
+                        title="Manage application"
+                        aria-label="Manage application"
                       >
-                        Manage
                         <ArrowRight className="h-4 w-4" />
                       </Link>
                     </td>
