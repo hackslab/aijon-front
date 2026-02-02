@@ -14,7 +14,11 @@ import BotTokenCard from "@/components/BotTokenCard";
 import AssignDocumentsModal from "@/components/AssignDocumentsModal";
 import RemoveAssignedDocumentButton from "@/components/RemoveAssignedDocumentButton";
 import EditApplicationModal from "@/components/EditApplicationModal";
-import { formatApplicationType, resolveApplicationType } from "@/lib/application";
+import DeleteApplicationButton from "@/components/DeleteApplicationButton";
+import {
+  formatApplicationType,
+  resolveApplicationType,
+} from "@/lib/application";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 
@@ -60,9 +64,7 @@ async function getApplication(id: string): Promise<Application | null> {
   }
 }
 
-async function getAssignedDocuments(
-  id: string,
-): Promise<AssignedDocument[]> {
+async function getAssignedDocuments(id: string): Promise<AssignedDocument[]> {
   try {
     const cookieStore = await cookies();
     const token = cookieStore.get("admin_token")?.value;
@@ -81,10 +83,7 @@ async function getAssignedDocuments(
     }
 
     if (!res.ok) {
-      console.warn(
-        `Failed to fetch assigned documents for ${id}:`,
-        res.status,
-      );
+      console.warn(`Failed to fetch assigned documents for ${id}:`, res.status);
       return [];
     }
 
@@ -275,15 +274,24 @@ export default async function OrganizationApplicationDetailsPage({
               {application.name}
             </h1>
             <p className="text-sm text-zinc-500 dark:text-zinc-400">
-              Application Name: <span className="font-medium">{application.name}</span>
+              Application Name:{" "}
+              <span className="font-medium">{application.name}</span>
             </p>
           </div>
         </div>
-        <EditApplicationModal
-          application={application}
-          organizations={organizations}
-          aiModels={aiModels}
-        />
+        <div className="flex items-center gap-2">
+          <EditApplicationModal
+            application={application}
+            organizations={organizations}
+            aiModels={aiModels}
+            iconOnly
+          />
+          <DeleteApplicationButton
+            applicationId={application.id}
+            iconOnly
+            redirectTo={`/admin/organizations/${organizationId}`}
+          />
+        </div>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-3">
@@ -297,8 +305,8 @@ export default async function OrganizationApplicationDetailsPage({
                 Organization
               </dt>
               <dd className="col-span-2 font-medium text-zinc-900 dark:text-zinc-100">
-                {organizations.find((o) => o.id === application.organization_id)?.name ||
-                  application.organization_id}
+                {organizations.find((o) => o.id === application.organization_id)
+                  ?.name || application.organization_id}
               </dd>
             </div>
             <div className="grid grid-cols-3 gap-4">
@@ -338,9 +346,16 @@ export default async function OrganizationApplicationDetailsPage({
         </div>
 
         {resolvedType === "API" ? (
-          <ApiKeyCard applicationId={application.id} apiKey={application.api_key ?? undefined} />
+          <ApiKeyCard
+            applicationId={application.id}
+            apiKey={application.api_key ?? undefined}
+          />
         ) : resolvedType === "TELEGRAM_BOT" ? (
-          <BotTokenCard botToken={application.bot_token} />
+          <BotTokenCard
+            application={application}
+            organizations={organizations}
+            aiModels={aiModels}
+          />
         ) : (
           <div className="rounded-xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
             <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
@@ -410,7 +425,10 @@ export default async function OrganizationApplicationDetailsPage({
                       <td className="px-6 py-4 font-medium text-zinc-900 dark:text-zinc-100">
                         {doc.filename}
                       </td>
-                      <td className="px-6 py-4 max-w-xs truncate" title={storagePath}>
+                      <td
+                        className="px-6 py-4 max-w-xs truncate"
+                        title={storagePath}
+                      >
                         {storagePath}
                       </td>
                       <td className="px-6 py-4 font-mono text-xs">

@@ -74,6 +74,37 @@ export async function createOrganization(data: CreateOrganizationDto) {
   }
 }
 
+export async function deleteOrganization(id: string) {
+  const token = await getAdminToken();
+
+  if (!token) {
+    return { error: "Not authenticated" };
+  }
+
+  try {
+    const res = await fetch(`${API_URL}/admin/organizations/${id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    await handleUnauthorized(res);
+
+    if (!res.ok) {
+      return {
+        error: await parseErrorMessage(res, "Failed to delete organization"),
+      };
+    }
+
+    revalidatePath("/admin/organizations");
+    return { success: true };
+  } catch (err) {
+    console.error("Delete Org Error:", err);
+    return { error: "Failed to connect to server" };
+  }
+}
+
 export async function updateOrganization(
   id: string,
   data: UpdateOrganizationDto,
@@ -259,7 +290,9 @@ export async function deleteDocument(id: string) {
     await handleUnauthorized(res);
 
     if (!res.ok) {
-      return { error: await parseErrorMessage(res, "Failed to delete document") };
+      return {
+        error: await parseErrorMessage(res, "Failed to delete document"),
+      };
     }
 
     revalidatePath("/admin/documents");
@@ -298,7 +331,9 @@ export async function createApplication(data: CreateApplicationDto) {
     const created = await res.json();
     revalidatePath("/admin/applications");
     if (data.organization_id) {
-      revalidatePath(`/admin/organizations/${data.organization_id}/applications`);
+      revalidatePath(
+        `/admin/organizations/${data.organization_id}/applications`,
+      );
     }
     return { success: true, application: created };
   } catch (err) {
@@ -327,7 +362,9 @@ export async function createAiModel(data: CreateAiModelDto) {
     await handleUnauthorized(res);
 
     if (!res.ok) {
-      return { error: await parseErrorMessage(res, "Failed to create AI model") };
+      return {
+        error: await parseErrorMessage(res, "Failed to create AI model"),
+      };
     }
 
     const created = await res.json();
@@ -340,7 +377,10 @@ export async function createAiModel(data: CreateAiModelDto) {
   }
 }
 
-export async function updateApplication(id: string, data: UpdateApplicationDto) {
+export async function updateApplication(
+  id: string,
+  data: UpdateApplicationDto,
+) {
   const token = await getAdminToken();
 
   if (!token) {
@@ -368,7 +408,9 @@ export async function updateApplication(id: string, data: UpdateApplicationDto) 
     revalidatePath(`/admin/applications/${id}`);
     revalidatePath("/admin/applications");
     if (data.organization_id) {
-      revalidatePath(`/admin/organizations/${data.organization_id}/applications`);
+      revalidatePath(
+        `/admin/organizations/${data.organization_id}/applications`,
+      );
       revalidatePath(
         `/admin/organizations/${data.organization_id}/applications/${id}`,
       );
@@ -432,7 +474,9 @@ export async function regenerateApiKey(id: string) {
     await handleUnauthorized(res);
 
     if (!res.ok) {
-      return { error: await parseErrorMessage(res, "Failed to regenerate key") };
+      return {
+        error: await parseErrorMessage(res, "Failed to regenerate key"),
+      };
     }
 
     const updated = await res.json();

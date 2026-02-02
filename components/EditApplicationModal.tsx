@@ -11,13 +11,18 @@ import {
   Organization,
   UpdateApplicationDto,
 } from "@/lib/types";
-import { APPLICATION_TYPE_OPTIONS, resolveApplicationType } from "@/lib/application";
+import {
+  APPLICATION_TYPE_OPTIONS,
+  resolveApplicationType,
+} from "@/lib/application";
 
 interface EditApplicationModalProps {
   application: Application;
   organizations: Organization[];
   aiModels?: AiModel[];
   iconOnly?: boolean;
+  buttonLabel?: string;
+  className?: string;
 }
 
 export default function EditApplicationModal({
@@ -25,6 +30,8 @@ export default function EditApplicationModal({
   organizations,
   aiModels = [],
   iconOnly = false,
+  buttonLabel = "Edit",
+  className,
 }: EditApplicationModalProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [error, setError] = useState("");
@@ -107,7 +114,10 @@ export default function EditApplicationModal({
       return (
         <button
           onClick={handleOpen}
-          className="rounded-lg p-2 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 dark:text-zinc-500 dark:hover:bg-zinc-800 dark:hover:text-zinc-300"
+          className={
+            className ||
+            "rounded-lg p-2 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 dark:text-zinc-500 dark:hover:bg-zinc-800 dark:hover:text-zinc-300"
+          }
           title="Edit application"
           aria-label="Edit application"
         >
@@ -115,21 +125,28 @@ export default function EditApplicationModal({
         </button>
       );
     }
-      return (
-        <button
-          onClick={handleOpen}
-          className="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300"
-        >
-          Edit
-        </button>
-      );
-    }
+    return (
+      <button
+        onClick={handleOpen}
+        className={
+          className ||
+          "text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300"
+        }
+      >
+        {buttonLabel}
+      </button>
+    );
+  }
 
   return (
     <>
       {iconOnly ? (
         <button
-          className="rounded-lg p-2 text-zinc-400 opacity-0 pointer-events-none"
+          className={
+            (className ||
+              "rounded-lg p-2 text-zinc-400 opacity-0 pointer-events-none") +
+            " opacity-0 pointer-events-none"
+          }
           aria-hidden="true"
           tabIndex={-1}
         >
@@ -137,10 +154,14 @@ export default function EditApplicationModal({
         </button>
       ) : (
         <button
-          className="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300 opacity-0 pointer-events-none"
+          className={
+            (className ||
+              "text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300") +
+            " opacity-0 pointer-events-none"
+          }
           aria-hidden="true"
         >
-          Edit
+          {buttonLabel}
         </button>
       )}
 

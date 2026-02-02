@@ -8,6 +8,7 @@ import {
   OrganizationStorageUsage,
 } from "@/lib/types";
 import EditOrganizationModal from "@/components/EditOrganizationModal";
+import DeleteOrganizationButton from "@/components/DeleteOrganizationButton";
 import OrganizationApplicationsSection from "@/components/OrganizationApplicationsSection";
 import OrganizationFilesSection from "@/components/OrganizationFilesSection";
 import OrganizationTabsWrapper from "@/components/OrganizationTabsWrapper";
@@ -59,7 +60,14 @@ export default function OrganizationDetailsView({
             Organization: {org.name}
           </h1>
         </div>
-        <EditOrganizationModal organization={org} />
+        <div className="flex items-center gap-2">
+          <EditOrganizationModal organization={org} iconOnly />
+          <DeleteOrganizationButton
+            organizationId={org.id}
+            iconOnly
+            redirectTo="/admin/organizations"
+          />
+        </div>
       </div>
 
       <div className="rounded-xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">

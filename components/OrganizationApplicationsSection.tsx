@@ -4,8 +4,21 @@ import { useState } from "react";
 import Link from "next/link";
 import { AiModel, Application, Organization } from "@/lib/types";
 import CreateApplicationModal from "@/components/CreateApplicationModal";
-import { Bot, Zap, Calendar, ArrowRight } from "lucide-react";
-import { formatApplicationType, resolveApplicationType } from "@/lib/application";
+import {
+  Bot,
+  Zap,
+  Calendar,
+  ArrowRight,
+  Terminal,
+  Send,
+  Instagram,
+  Facebook,
+  MessageCircle,
+} from "lucide-react";
+import {
+  formatApplicationType,
+  resolveApplicationType,
+} from "@/lib/application";
 
 type OrganizationApplicationsSectionProps = {
   organizationId: string;
@@ -23,6 +36,23 @@ export default function OrganizationApplicationsSection({
   initialOrganizationId,
 }: OrganizationApplicationsSectionProps) {
   const [showCards, setShowCards] = useState(false);
+
+  const getApplicationIcon = (type: string) => {
+    switch (type) {
+      case "API":
+        return Terminal;
+      case "TELEGRAM_BOT":
+        return Send;
+      case "INSTAGRAM":
+        return Instagram;
+      case "FACEBOOK":
+        return Facebook;
+      case "WHATSAPP":
+        return MessageCircle;
+      default:
+        return Bot;
+    }
+  };
 
   return (
     <div className="rounded-xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
@@ -62,12 +92,16 @@ export default function OrganizationApplicationsSection({
                 key={application.id}
                 className="group relative overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900"
               >
-                
                 <div className="relative p-6">
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex items-center gap-3">
                       <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 shadow-lg shadow-indigo-500/25">
-                        <Bot className="h-6 w-6 text-white" />
+                        {(() => {
+                          const Icon = getApplicationIcon(
+                            resolveApplicationType(application),
+                          );
+                          return <Icon className="h-6 w-6 text-white" />;
+                        })()}
                       </div>
                       <div>
                         <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">
@@ -76,7 +110,9 @@ export default function OrganizationApplicationsSection({
                         {application.created_at && (
                           <p className="text-xs text-zinc-500 dark:text-zinc-400 flex items-center gap-1 mt-0.5">
                             <Calendar className="h-3 w-3" />
-                            {new Date(application.created_at).toLocaleDateString()}
+                            {new Date(
+                              application.created_at,
+                            ).toLocaleDateString()}
                           </p>
                         )}
                       </div>
@@ -89,11 +125,17 @@ export default function OrganizationApplicationsSection({
                         <Zap className="h-4 w-4 text-amber-500" />
                       </div>
                       <div className="flex-1">
-                        <p className="text-xs text-zinc-500 dark:text-zinc-400 mb-0.5">Temperature</p>
+                        <p className="text-xs text-zinc-500 dark:text-zinc-400 mb-0.5">
+                          Temperature
+                        </p>
                         <p className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
                           {application.temperature}
                           <span className="ml-1 text-xs font-normal text-zinc-500 dark:text-zinc-400">
-                            {application.temperature > 0.7 ? "(Creative)" : application.temperature > 0.4 ? "(Balanced)" : "(Precise)"}
+                            {application.temperature > 0.7
+                              ? "(Creative)"
+                              : application.temperature > 0.4
+                                ? "(Balanced)"
+                                : "(Precise)"}
                           </span>
                         </p>
                       </div>
@@ -104,9 +146,13 @@ export default function OrganizationApplicationsSection({
                         <Bot className="h-4 w-4 text-indigo-500" />
                       </div>
                       <div className="flex-1">
-                        <p className="text-xs text-zinc-500 dark:text-zinc-400 mb-0.5">Channel</p>
+                        <p className="text-xs text-zinc-500 dark:text-zinc-400 mb-0.5">
+                          Channel
+                        </p>
                         <p className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
-                          {formatApplicationType(resolveApplicationType(application))}
+                          {formatApplicationType(
+                            resolveApplicationType(application),
+                          )}
                         </p>
                       </div>
                     </div>
@@ -116,16 +162,22 @@ export default function OrganizationApplicationsSection({
                         <Bot className="h-4 w-4 text-indigo-500" />
                       </div>
                       <div className="flex-1">
-                        <p className="text-xs text-zinc-500 dark:text-zinc-400 mb-0.5">AI Model</p>
+                        <p className="text-xs text-zinc-500 dark:text-zinc-400 mb-0.5">
+                          AI Model
+                        </p>
                         <p className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 truncate">
-                          {aiModels.find(m => m.id === application.ai_model_id)?.name || application.ai_model_id}
+                          {aiModels.find(
+                            (m) => m.id === application.ai_model_id,
+                          )?.name || application.ai_model_id}
                         </p>
                       </div>
                     </div>
 
                     {application.system_prompt && (
                       <div className="pt-2 border-t border-zinc-100 dark:border-zinc-800">
-                        <p className="text-xs text-zinc-500 dark:text-zinc-400 mb-1.5">System Prompt</p>
+                        <p className="text-xs text-zinc-500 dark:text-zinc-400 mb-1.5">
+                          System Prompt
+                        </p>
                         <p className="text-sm text-zinc-600 dark:text-zinc-300 line-clamp-2 leading-relaxed">
                           {application.system_prompt}
                         </p>
@@ -189,7 +241,12 @@ export default function OrganizationApplicationsSection({
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
                         <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 shadow-md shadow-indigo-500/20">
-                          <Bot className="h-5 w-5 text-white" />
+                          {(() => {
+                            const Icon = getApplicationIcon(
+                              resolveApplicationType(application),
+                            );
+                            return <Icon className="h-5 w-5 text-white" />;
+                          })()}
                         </div>
                         <div>
                           <p className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
@@ -198,7 +255,9 @@ export default function OrganizationApplicationsSection({
                           {application.system_prompt && (
                             <p className="text-xs text-zinc-500 dark:text-zinc-400 truncate max-w-xs">
                               {application.system_prompt.substring(0, 50)}
-                              {application.system_prompt.length > 50 ? '...' : ''}
+                              {application.system_prompt.length > 50
+                                ? "..."
+                                : ""}
                             </p>
                           )}
                         </div>
@@ -210,12 +269,16 @@ export default function OrganizationApplicationsSection({
                           <Zap className="h-3.5 w-3.5 text-indigo-500" />
                         </div>
                         <span className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
-                          {aiModels.find(m => m.id === application.ai_model_id)?.name || application.ai_model_id}
+                          {aiModels.find(
+                            (m) => m.id === application.ai_model_id,
+                          )?.name || application.ai_model_id}
                         </span>
                       </div>
                     </td>
                     <td className="px-6 py-4 text-xs font-medium text-zinc-700 dark:text-zinc-300">
-                      {formatApplicationType(resolveApplicationType(application))}
+                      {formatApplicationType(
+                        resolveApplicationType(application),
+                      )}
                     </td>
                     <td className="px-6 py-4">
                       <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold">
@@ -237,7 +300,11 @@ export default function OrganizationApplicationsSection({
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-1.5 text-xs text-zinc-600 dark:text-zinc-400">
                         <Calendar className="h-3.5 w-3.5" />
-                        {application.created_at ? new Date(application.created_at).toLocaleDateString() : '-'}
+                        {application.created_at
+                          ? new Date(
+                              application.created_at,
+                            ).toLocaleDateString()
+                          : "-"}
                       </div>
                     </td>
                     <td className="px-6 py-4 text-right">

@@ -28,6 +28,7 @@ export default function CreateApplicationModal({
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [selectedType, setSelectedType] = useState<ApplicationType>("API");
+  const [temperature, setTemperature] = useState(0.7);
 
   const initialOrgId =
     (initialOrganizationId &&
@@ -40,6 +41,7 @@ export default function CreateApplicationModal({
 
   function handleOpen() {
     setSelectedType("API");
+    setTemperature(0.7);
     setError("");
     setIsOpen(true);
   }
@@ -48,6 +50,7 @@ export default function CreateApplicationModal({
     setIsOpen(false);
     setError("");
     setSelectedType("API");
+    setTemperature(0.7);
   }
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -283,49 +286,70 @@ export default function CreateApplicationModal({
               </select>
             </div>
 
-            <div>
-              <label
-                htmlFor="organization_id"
-                className="block text-sm font-medium text-zinc-700 dark:text-zinc-300"
-              >
-                Organization
-              </label>
-              <select
-                id="organization_id"
+            {initialOrganizationId ? (
+              <input
+                type="hidden"
                 name="organization_id"
-                defaultValue={initialOrgId}
-                required
-                disabled={organizations.length === 0}
-                className="mt-1 block w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-zinc-900 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 disabled:opacity-60 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
-              >
-                {organizations.length === 0 && (
-                  <option value="">No organizations</option>
-                )}
-                {organizations.map((org) => (
-                  <option key={org.id} value={org.id}>
-                    {org.name}
-                  </option>
-                ))}
-              </select>
-            </div>
+                value={initialOrgId}
+              />
+            ) : (
+              <div>
+                <label
+                  htmlFor="organization_id"
+                  className="block text-sm font-medium text-zinc-700 dark:text-zinc-300"
+                >
+                  Organization
+                </label>
+                <select
+                  id="organization_id"
+                  name="organization_id"
+                  defaultValue={initialOrgId}
+                  required
+                  disabled={organizations.length === 0}
+                  className="mt-1 block w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-zinc-900 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 disabled:opacity-60 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
+                >
+                  {organizations.length === 0 && (
+                    <option value="">No organizations</option>
+                  )}
+                  {organizations.map((org) => (
+                    <option key={org.id} value={org.id}>
+                      {org.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
 
             <div>
-              <label
-                htmlFor="temperature"
-                className="block text-sm font-medium text-zinc-700 dark:text-zinc-300"
-              >
-                Temperature
-              </label>
+              <div className="flex items-center justify-between">
+                <label
+                  htmlFor="temperature"
+                  className="block text-sm font-medium text-zinc-700 dark:text-zinc-300"
+                >
+                  Temperature
+                </label>
+                <span className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
+                  {temperature}
+                </span>
+              </div>
               <input
-                type="number"
+                type="range"
                 name="temperature"
                 id="temperature"
                 min="0"
                 max="1"
                 step="0.1"
-                defaultValue="0.7"
-                className="mt-1 block w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-zinc-900 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
+                value={temperature}
+                onChange={(e) =>
+                  setTemperature(Number.parseFloat(e.target.value))
+                }
+                className="mt-2 block w-full cursor-pointer accent-indigo-600"
               />
+              <div className="mt-1 flex justify-between text-xs text-zinc-500 dark:text-zinc-400">
+                <span>Precise</span>
+                <span>Balanced</span>
+                <span>Creative</span>
+              </div>
             </div>
 
             <div className="mt-6 flex justify-end gap-3">
@@ -338,7 +362,9 @@ export default function CreateApplicationModal({
               </button>
               <button
                 type="submit"
-                disabled={loading || organizations.length === 0 || aiModels.length === 0}
+                disabled={
+                  loading || organizations.length === 0 || aiModels.length === 0
+                }
                 className="inline-flex items-center rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50 dark:focus:ring-offset-zinc-900"
               >
                 {loading ? (
