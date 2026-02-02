@@ -42,9 +42,11 @@ export default function EditApplicationModal({
   const hasCurrentModel = aiModels.some(
     (model) => model.id === application.ai_model_id,
   );
+  const [temperature, setTemperature] = useState(application.temperature);
 
   function handleOpen() {
     setSelectedType(resolveApplicationType(application));
+    setTemperature(application.temperature);
     setError("");
     setIsOpen(true);
   }
@@ -344,21 +346,27 @@ export default function EditApplicationModal({
             </div>
 
             <div>
-              <label
-                htmlFor="temperature"
-                className="block text-sm font-medium text-zinc-700 dark:text-zinc-300"
-              >
-                Temperature
-              </label>
+              <div className="flex justify-between">
+                <label
+                  htmlFor="temperature"
+                  className="block text-sm font-medium text-zinc-700 dark:text-zinc-300"
+                >
+                  Temperature
+                </label>
+                <span className="text-sm text-zinc-500 dark:text-zinc-400">
+                  {temperature}
+                </span>
+              </div>
               <input
-                type="number"
+                type="range"
                 name="temperature"
                 id="temperature"
                 min="0"
                 max="1"
                 step="0.1"
-                defaultValue={application.temperature}
-                className="mt-1 block w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-zinc-900 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
+                value={temperature}
+                onChange={(e) => setTemperature(Number(e.target.value))}
+                className="mt-2 block w-full cursor-pointer accent-indigo-600"
               />
             </div>
 
