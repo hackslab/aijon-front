@@ -94,7 +94,7 @@ export default function CreateAiModelModal({
                 id="name"
                 required
                 className="mt-1 block w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-zinc-900 placeholder-zinc-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 dark:placeholder-zinc-500"
-                placeholder="Gemini 1.5 Flash"
+                placeholder="Gemini 1.5 Pro"
               />
             </div>
 
@@ -111,7 +111,7 @@ export default function CreateAiModelModal({
                 id="key"
                 required
                 className="mt-1 block w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-zinc-900 placeholder-zinc-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 dark:placeholder-zinc-500"
-                placeholder="gemini-1.5-flash-001"
+                placeholder="gemini-1.5-pro"
               />
             </div>
 

@@ -17,6 +17,7 @@ import EditApplicationModal from "@/components/EditApplicationModal";
 import DeleteApplicationButton from "@/components/DeleteApplicationButton";
 import TestChatbotCard from "@/components/TestChatbotCard";
 import { formatApplicationType } from "@/lib/application";
+import CollapsibleText from "@/components/CollapsibleText";
 import { AlertCircle, CheckCircle2, Loader2 } from "lucide-react"; // Import icons
 
 function StatusBadge({
@@ -305,20 +306,28 @@ export default async function OrganizationApplicationDetailsPage({
     notFound();
   }
 
-  const [assignedDocuments, documents, organizations, aiModels, folders, providers] =
-    await Promise.all([
-      getAssignedDocuments(applicationId),
-      getDocuments(application.organization_id),
-      getOrganizations(),
-      getAiModels(),
-      getFolders(application.organization_id),
-      getProviders(applicationId),
-    ]);
+  const [
+    assignedDocuments,
+    documents,
+    organizations,
+    aiModels,
+    folders,
+    providers,
+  ] = await Promise.all([
+    getAssignedDocuments(applicationId),
+    getDocuments(application.organization_id),
+    getOrganizations(),
+    getAiModels(),
+    getFolders(application.organization_id),
+    getProviders(applicationId),
+  ]);
 
   const assignedIds = assignedDocuments.map((doc) => doc.id);
   const providerSummary =
     providers.length > 0
-      ? providers.map((provider) => formatApplicationType(provider.type)).join(", ")
+      ? providers
+          .map((provider) => formatApplicationType(provider.type))
+          .join(", ")
       : "No providers connected";
   const apiProvider = providers.find((provider) => provider.type === "API");
 
@@ -421,8 +430,8 @@ export default async function OrganizationApplicationDetailsPage({
               <dt className="font-medium text-zinc-500 dark:text-zinc-400">
                 System Prompt
               </dt>
-              <dd className="col-span-2 whitespace-pre-line text-zinc-900 dark:text-zinc-100">
-                {application.system_prompt}
+              <dd className="col-span-2">
+                <CollapsibleText text={application.system_prompt} />
               </dd>
             </div>
           </dl>
