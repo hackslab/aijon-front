@@ -1,10 +1,14 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { Toaster } from "sonner";
+import {
+  ADMIN_PLATFORM_DESCRIPTION,
+  ADMIN_PLATFORM_NAME,
+} from "@/lib/branding";
 
 export const metadata: Metadata = {
-  title: "Chat SaaS Admin",
-  description: "Admin panel for Chat SaaS",
+  title: ADMIN_PLATFORM_NAME,
+  description: ADMIN_PLATFORM_DESCRIPTION,
 };
 
 export default function RootLayout({

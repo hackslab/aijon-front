@@ -1,5 +1,6 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { ADMIN_PLATFORM_NAME } from "@/lib/branding";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 
@@ -92,7 +93,7 @@ export default async function DashboardPage() {
 
       <div className="rounded-xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
         <h2 className="text-lg font-medium text-zinc-900 dark:text-zinc-100">
-          Welcome to Chat SaaS Admin
+          Welcome to {ADMIN_PLATFORM_NAME}
         </h2>
         <p className="mt-2 text-zinc-500 dark:text-zinc-400">
           Select a category from the sidebar to manage your resources. This

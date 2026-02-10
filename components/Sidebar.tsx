@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { logout } from "@/lib/actions";
+import { PLATFORM_NAME } from "@/lib/branding";
 
 const links = [
   {
@@ -105,7 +106,7 @@ export default function Sidebar() {
             />
           </svg>
           <span className="text-lg font-bold text-zinc-900 dark:text-zinc-100">
-            Chat SaaS
+            {PLATFORM_NAME}
           </span>
         </div>
 
